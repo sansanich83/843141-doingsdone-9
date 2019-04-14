@@ -1,6 +1,54 @@
 <?php
 // показывать или нет выполненные задачи
 $show_complete_tasks = rand(0, 1);
+$categories = ["Входящие","Учеба","Работа","Домашние дела","Авто"];
+$tasks = [
+    [
+        'Задача' => 'Собеседование в IT компании',
+        'Дата выполнения' => '01.12.2018',
+        'Категория' => 'Работа',
+        'Выполнен' => 'Нет'
+    ],
+    [
+        'Задача' => 'Выполнить тестовое задание',
+        'Дата выполнения' => '25.12.2018',
+        'Категория' => 'Работа',
+        'Выполнен' => 'Нет'
+    ],
+    [
+        'Задача' => 'Сделать задание первого раздела',
+        'Дата выполнения' => '21.12.2018',
+        'Категория' => 'Учеба',
+        'Выполнен' => 'Да'
+    ],
+    [
+        'Задача' => 'Встреча с другом',
+        'Дата выполнения' => '22.12.2018',
+        'Категория' => 'Входящие',
+        'Выполнен' => 'Нет'
+    ],
+    [
+        'Задача' => 'Купить корм для кота',
+        'Дата выполнения' => 'Нет',
+        'Категория' => 'Домашние дела',
+        'Выполнен' => 'Нет'
+    ],
+    [
+        'Задача' => 'Заказать пиццу',
+        'Дата выполнения' => 'Нет',
+        'Категория' => 'Домашние дела',
+        'Выполнен' => 'Нет'
+    ]
+];
+function countByCategory ($list, $category) {
+    $count = 0;
+    foreach ($list as $key => $val) {
+        if ($category === $val['Категория']) {
+            $count ++;
+        }
+    }
+    return $count;
+}
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -42,14 +90,13 @@ $show_complete_tasks = rand(0, 1);
                     <h2 class="content__side-heading">Проекты</h2>
 
                     <nav class="main-navigation">
-                        <?php
-                            $categories = ["Входящие","Учеба","Работа","Домашние дела","Авто"];
-                        ?>
+
                         <ul class="main-navigation__list">
-                            <?php foreach ($categories as $key => $val): ?>
+                            <?php foreach ($categories as $key => $category): ?>
                             <li class="main-navigation__list-item">
-                                <a class="main-navigation__list-item-link" href="#"><?=$val;?></a>
-                                <span class="main-navigation__list-item-count">0</span>
+                                <a class="main-navigation__list-item-link" href="#"><?=$category;?></a>
+                                <span
+                                    class="main-navigation__list-item-count"><?=countByCategory($tasks,$category);?></span>
                             </li>
                             <?php endforeach; ?>
                         </ul>
@@ -84,51 +131,11 @@ $show_complete_tasks = rand(0, 1);
                         </label>
                     </div>
 
-                    <?php
-                        $tasks = [
-                            [
-                                'Задача' => 'Собеседование в IT компании',
-                                'Дата выполнения' => '01.12.2018',
-                                'Категория' => 'Работа',
-                                'Выполнен' => 'Нет'
-                            ],
-                            [
-                                'Задача' => 'Выполнить тестовое задание',
-                                'Дата выполнения' => '25.12.2018',
-                                'Категория' => 'Работа',
-                                'Выполнен' => 'Нет'
-                            ],
-                            [
-                                'Задача' => 'Сделать задание первого раздела',
-                                'Дата выполнения' => '21.12.2018',
-                                'Категория' => 'Учеба',
-                                'Выполнен' => 'Да'
-                            ],
-                            [
-                                'Задача' => 'Встреча с другом',
-                                'Дата выполнения' => '22.12.2018',
-                                'Категория' => 'Входящие',
-                                'Выполнен' => 'Нет'
-                            ],
-                            [
-                                'Задача' => 'Купить корм для кота',
-                                'Дата выполнения' => 'Нет',
-                                'Категория' => 'Домашние дела',
-                                'Выполнен' => 'Нет'
-                            ],
-                            [
-                                'Задача' => 'Заказать пиццу',
-                                'Дата выполнения' => 'Нет',
-                                'Категория' => 'Домашние дела',
-                                'Выполнен' => 'Нет'
-                            ]
-                        ];
-                    ?>
                     <table class="tasks">
                         <?php foreach ($tasks as $key => $val): ?>
                         <tr class="tasks__item task
                             <?php if ($val['Выполнен'] === 'Да'): ?> task--completed
-                                <?php if($show_complete_tasks === 1): ?> visually-hidden
+                                <?php if ($show_complete_tasks === 1): ?> visually-hidden
                                 <?php endif; ?>
                             <?php endif; ?>
                         ">
@@ -136,7 +143,7 @@ $show_complete_tasks = rand(0, 1);
                                 <label class="checkbox task__checkbox">
                                     <input class="checkbox__input visually-hidden task__checkbox" type="checkbox"
                                         value="1">
-                                    <span class="checkbox__text"><?=$val['Задача'] ;?></span>
+                                    <span class="checkbox__text"><?=$val['Задача']; ?></span>
                                 </label>
                             </td>
                             <td class="task__file">
@@ -144,7 +151,7 @@ $show_complete_tasks = rand(0, 1);
                             </td>
                             <td class="task__date"></td>
                         </tr>
-                        <?php endforeach;?>
+                        <?php endforeach; ?>
                     </table>
                 </main>
             </div>
