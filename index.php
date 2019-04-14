@@ -126,8 +126,12 @@ $show_complete_tasks = rand(0, 1);
                     ?>
                     <table class="tasks">
                         <?php foreach ($tasks as $key => $val): ?>
-                        <tr
-                            class="tasks__item task <?php if ($val['Выполнен'] === 'Да'): ?> task--completed <?php endif; ?>">
+                        <tr class="tasks__item task
+                            <?php if ($val['Выполнен'] === 'Да'): ?> task--completed
+                                <?php if($show_complete_tasks === 1): ?> visually-hidden
+                                <?php endif; ?>
+                            <?php endif; ?>
+                        ">
                             <td class="task__select">
                                 <label class="checkbox task__checkbox">
                                     <input class="checkbox__input visually-hidden task__checkbox" type="checkbox"
