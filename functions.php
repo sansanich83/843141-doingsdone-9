@@ -32,3 +32,12 @@ function esc($str) {
 
 	return $text;
 }
+
+function isHotTask($task_date) {
+    $curdate = time();
+    $task_ts = strtotime($task_date);
+    $ts_diff = ($task_ts - $curdate);
+    if ($ts_diff < 86400) {
+        print("task--important");
+    }
+}
