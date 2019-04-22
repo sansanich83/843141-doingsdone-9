@@ -1,4 +1,6 @@
-CREATE DATABASE `doingsdone` /*!40100 COLLATE 'utf8_general_ci' */;
+CREATE DATABASE `doingsdone`;
+
+USE `doingsdone`;
 
 CREATE TABLE `categories` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
