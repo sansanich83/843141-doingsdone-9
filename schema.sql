@@ -12,16 +12,14 @@ CREATE TABLE `users` (
 	UNIQUE INDEX `email` (`email`)
 )
 COLLATE='utf8_general_ci'
-ENGINE=InnoDB
 ;
+
 
 CREATE TABLE `categories` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
-	`category` CHAR(50) NOT NULL,
+	`category_name` CHAR(50) NOT NULL,
 	`user_id` INT(11) NOT NULL,
-	PRIMARY KEY (`id`),
-	UNIQUE INDEX `user_id` (`user_id`),
-	CONSTRAINT `FK_categories_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+	PRIMARY KEY (`id`)
 )
 COLLATE='utf8_general_ci'
 ;
@@ -34,10 +32,7 @@ CREATE TABLE `tasks` (
 	`status_complete` TINYINT(1) NULL DEFAULT NULL,
 	`file_link` VARCHAR(50) NULL DEFAULT NULL,
 	`deadline` DATE NOT NULL,
-	PRIMARY KEY (`id`),
-	INDEX `FK_tasks_categories` (`category_id`),
-	CONSTRAINT `FK_tasks_categories` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`)
+	PRIMARY KEY (`id`)
 )
 COLLATE='utf8_general_ci'
-ENGINE=InnoDB
 ;
