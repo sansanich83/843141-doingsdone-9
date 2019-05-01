@@ -25,17 +25,21 @@
     <?php foreach ($tasks as $key => $val): ?>
     <tr class="tasks__item task
             <?php
-            if ($val['Выполнен'] === 'Да'): echo "task--completed";
-            else: isHotTask($val['Дата выполнения']);
+            if ($val['status_complete'] === '1'): echo "task--completed";
+            else: isHotTask($val['deadline']);
             endif;
             ?>
-        <?php if (($val['Выполнен'] === 'Да') && ($show_complete_tasks === 0)): ?>
+        <?php if (($val['status_complete'] === '1') && ($show_complete_tasks === 0)): ?>
             visually-hidden
         <?php endif; ?>">
         <td class="task__select">
             <label class="checkbox task__checkbox">
-                <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="1">
-                <span class="checkbox__text"><?=esc($val['Задача']); ?></span>
+                <input class="checkbox__input visually-hidden task__checkbox"
+                        <?php if ($val['status_complete'] === '1'): ?>
+                            checked
+                        <?php endif; ?>
+                    type="checkbox" value="1">
+                <span class="checkbox__text"><?=esc($val['task_name']); ?></span>
             </label>
         </td>
         <td class="task__file">

@@ -13,7 +13,7 @@ INSERT INTO `doingsdone`.`categories` (`category_name`, `user_id`) VALUES ('Ав
 INSERT INTO `doingsdone`.`tasks` (`task_name`, `category_id`, `date_create`, `deadline`) VALUES ('Собеседование в IT компании', '3', '2019-04-23 16:03:39', '2019-05-20');
 INSERT INTO `doingsdone`.`tasks` (`task_name`, `category_id`, `date_create`, `deadline`) VALUES ('Выполнить тестовое задание', '3', '2019-04-23 16:06:27', '2018-12-21');
 INSERT INTO `doingsdone`.`tasks` (`task_name`, `category_id`, `date_create`, `deadline`) VALUES ('Сделать задание первого раздела', '2', '2019-04-23 16:07:27', '2018-12-21');
-INSERT INTO `doingsdone`.`tasks` (`task_name`, `category_id`, `date_create`, `deadline`) VALUES ('Собеседование в IT компании', '1', '2019-04-23 16:03:39', '2019-05-20');
+INSERT INTO `doingsdone`.`tasks` (`task_name`, `category_id`, `date_create`, `deadline`) VALUES ('Встреча с другом', '1', '2019-04-23 16:03:39', '2019-05-20');
 INSERT INTO `doingsdone`.`tasks` (`task_name`, `category_id`, `date_create`, `deadline`) VALUES ('Купить корм для кота', '4', '2019-04-23 16:07:27', '2019-04-23');
 INSERT INTO `doingsdone`.`tasks` (`task_name`, `category_id`, `date_create`, `deadline`) VALUES ('Заказать пиццу', '4', '2019-04-23 16:10:43', '2019-04-23');
 
@@ -42,3 +42,17 @@ SELECT category_name,task_name FROM categories c
 INNER JOIN tasks t
 ON c.id = t.category_id
 WHERE c.id = 1;
+
+-- Список всех задач у пользователя с id = 1
+SELECT task_name FROM tasks t
+INNER JOIN categories c
+ON t.category_id = c.id
+WHERE c.user_id = 1
+;
+
+-- Список категорий (проектов) у пользователя с id = 1
+SELECT category_name FROM categories c
+INNER JOIN users u
+ON c.user_id = u.id
+WHERE u.id = 1
+;
