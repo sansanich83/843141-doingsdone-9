@@ -3,7 +3,7 @@
 function countByCategory ($list, $category) {
     $count = 0;
     foreach ($list as $key => $val) {
-        if ($category === $val['Категория']) {
+        if ($category === $val['category_name']) {
             $count ++;
         }
     }
