@@ -2,6 +2,7 @@
 // показывать или нет выполненные задачи
 $show_complete_tasks = rand(0, 1);
 $page_name = 'Дела в порядке';
+$cat_id = '0';
 
 require_once('functions.php');
 require_once('config/db.php');
@@ -14,26 +15,39 @@ if (!$connect) {
     print($error);
 }
 else {
-    $sql_cat_list = 'SELECT category_name FROM categories c
+    $sql_categories = 'SELECT category_name, c.id FROM categories c
     INNER JOIN users u
     ON c.user_id = u.id
     WHERE u.id = 1';
 
-    $sql_task_list = 'SELECT task_name, deadline, status_complete, category_id, category_name FROM tasks t
+    $sql_tasks = 'SELECT task_name, deadline, status_complete, category_id, category_name FROM tasks t
     INNER JOIN categories c
     ON t.category_id = c.id
     WHERE c.user_id = 1';
 
-    $task_list = mysqli_query($connect, $sql_task_list);
-    $cat_list = mysqli_query($connect, $sql_cat_list);
-    if ($cat_list) {
-        $categories = mysqli_fetch_all($cat_list, MYSQLI_ASSOC);
+    $tasks_res = mysqli_query($connect, $sql_tasks);
+    $categories_res = mysqli_query($connect, $sql_categories);
+    if ($categories_res) {
+        $categories = mysqli_fetch_all($categories_res, MYSQLI_ASSOC);
     }
-    if ($task_list) {
-        $tasks = mysqli_fetch_all($task_list, MYSQLI_ASSOC);
+    if ($tasks_res) {
+        $tasks = mysqli_fetch_all($tasks_res, MYSQLI_ASSOC);
+        $all_tasks = $tasks;
+    }
+
+    if (isset($_GET['cat_id'])) {
+        $cat_id = $_GET['cat_id'];
+        $sql_tasks = 'SELECT task_name, deadline, status_complete, category_id, category_name FROM tasks t
+        INNER JOIN categories c
+        ON t.category_id = c.id
+        WHERE c.user_id = 1 AND c.id =' . $cat_id;
+
+        $tasks_res = mysqli_query($connect, $sql_tasks);
+        if ($tasks_res) {
+            $tasks = mysqli_fetch_all($tasks_res, MYSQLI_ASSOC);
+        }
     }
 }
-
 
 $content = include_template('content.php', [
     'tasks' => $tasks,
@@ -41,7 +55,8 @@ $content = include_template('content.php', [
 ]);
 $categories = include_template('categories.php', [
     'categories' => $categories,
-    'tasks' => $tasks
+    'tasks' => $tasks,
+    'all_tasks' => $all_tasks
 ]);
 $layout_content = include_template('layout.php', [
     'page_name' => $page_name,
@@ -49,4 +64,10 @@ $layout_content = include_template('layout.php', [
     'content' => $content
 ]);
 
-print($layout_content);
+$task_count = count($tasks);
+
+if ($task_count == 0) {
+    http_response_code(404);
+} else {
+    print($layout_content);
+}
