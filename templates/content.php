@@ -43,9 +43,10 @@
             </label>
         </td>
         <td class="task__file">
-            <a class="download-link" href="#">Home.psd</a>
+            <a class="download-link <?php if ($val['file_link'] === NULL):?>visually-hidden<?php endif;?>
+            "href="<?= $val['file_link'] ;?>"><?= basename($val['file_link']) ;?></a>
         </td>
-        <td class="task__date"></td>
+        <td class="task__date"><?= $val['deadline'] ;?></td>
     </tr>
     <?php endforeach; ?>
 </table>

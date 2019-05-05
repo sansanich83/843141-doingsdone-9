@@ -13,6 +13,7 @@ mysqli_set_charset($connect, "utf8");
 if (!$connect) {
     $error = mysqli_connect_error();
     print($error);
+    exit;
 }
 else {
     $sql_categories = 'SELECT category_name, c.id FROM categories c
@@ -20,10 +21,11 @@ else {
     ON c.user_id = u.id
     WHERE u.id = 1';
 
-    $sql_tasks = 'SELECT task_name, deadline, status_complete, category_id, category_name FROM tasks t
+    $sql_tasks = 'SELECT task_name, deadline, status_complete, category_id, category_name, file_link FROM tasks t
     INNER JOIN categories c
     ON t.category_id = c.id
-    WHERE c.user_id = 1';
+    WHERE c.user_id = 1
+    ORDER BY t.id DESC';
 
     $tasks_res = mysqli_query($connect, $sql_tasks);
     $categories_res = mysqli_query($connect, $sql_categories);
@@ -49,10 +51,68 @@ else {
     }
 }
 
-$content = include_template('content.php', [
-    'tasks' => $tasks,
-    'show_complete_tasks' => $show_complete_tasks
-]);
+
+if (isset($_GET['add_task'])) {
+    $content = include_template('add.php', [
+        'categories' => $categories
+    ]);
+} else {
+    $content = include_template('content.php', [
+        'tasks' => $tasks,
+        'show_complete_tasks' => $show_complete_tasks
+    ]);
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    $required_fields = ['name', 'project'];
+    $errors = [];
+
+    foreach ($required_fields as $field) {
+        if (empty($_POST[$field])) {
+            $errors[$field] = 'Поле обязательно для заполнения';
+        }
+    }
+    if (($_POST['date']) && (!is_date_valid($_POST['date']))) {
+        $errors['date'] = 'Нужно ввести дату в формате ГГГГ-ММ-ДД';
+    } else if (($_POST['date']) && (is_old_task_date($_POST['date']))) {
+        $errors['date'] = 'Дата должна быть больше или равна текущей';
+    }
+
+    $task_name = $_POST['name'];
+    $project_id = $_POST['project'];
+    $task_deadline = $_POST['date'];
+
+    if (isset($_FILES['file'])) {
+        $file_name = $_FILES['file']['name'];
+        $file_path = __DIR__ . '/uploads/';
+        $file_url = '/uploads/' . $file_name;
+        move_uploaded_file($_FILES['file']['tmp_name'], $file_path . $file_name);
+    }
+
+    if (count($errors)) {
+        $content = include_template('add.php', [
+            'task_name' => $task_name,
+            'project_id' => $project_id,
+            'task_deadline' => $task_deadline,
+            'categories' => $categories,
+            'errors' => $errors,
+            'file_name' => $file_name
+        ]);
+
+    } else {
+        if (!$task_deadline) {$task_deadline = NULL;}
+        if (!$file_name) {$file_url = NULL;}
+        $sql_add_task = 'INSERT INTO `doingsdone`.`tasks` (`task_name`, `category_id`, `deadline`, `file_link`)
+        VALUES (?, 4, ?, ?)';
+
+        $stmt = db_get_prepare_stmt($connect, $sql_add_task, [$task_name, $task_deadline, $file_url]);
+
+        $add_task_res = mysqli_stmt_execute($stmt);
+        header("location: index.php");
+    }
+}
+
 $categories = include_template('categories.php', [
     'categories' => $categories,
     'tasks' => $tasks,
@@ -64,9 +124,7 @@ $layout_content = include_template('layout.php', [
     'content' => $content
 ]);
 
-$task_count = count($tasks);
-
-if ($task_count == 0) {
+if (count($tasks) === 0) {
     http_response_code(404);
 } else {
     print($layout_content);
