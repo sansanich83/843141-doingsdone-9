@@ -20,7 +20,7 @@
                 </a>
                 <div class="main-header__side">
                     <a class="main-header__side-item button button--plus open-modal"
-                        href="/?add_task=1">Добавить задачу</a>
+                        href="add.php">Добавить задачу</a>
                     <div class="main-header__side-item user-menu">
                         <div class="user-menu__data">
                             <p>Александр</p>
@@ -46,7 +46,8 @@
                 </section>
 
                 <main class="content__main">
-                    <?=$content?>
+                    <?=$content;?>
+                    <?=$content_add_task;?>
                 </main>
 
             </div>

@@ -1,7 +1,7 @@
 <main class="content__main">
     <h2 class="content__main-heading">Добавление задачи</h2>
 
-    <form class="form" action="index.php" method="POST" autocomplete="off" enctype="multipart/form-data">
+    <form class="form" action="add.php" method="POST" autocomplete="off" enctype="multipart/form-data">
         <div class="form__row">
             <label class="form__label" for="name">Название <sup>*</sup></label>
 
@@ -47,7 +47,7 @@
                 <?php if ($errors['date']): ?>
                     form__input--error
                 <?php endif; ?>
-            " type="text" name="date" id="date" value="<?= $task_date ;?>"
+            " type="text" name="date" id="date" value="<?= $task_deadline ;?>"
                 placeholder="Введите дату в формате ГГГГ-ММ-ДД">
             <p class="form__message">
                 <?php if ($errors['date']):
