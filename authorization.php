@@ -12,11 +12,12 @@ if (!$connect) {
     exit;
 }
 
-$registration = include_template('register.php', []);
+$authorization = include_template('auth.php', []);
+session_start();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    $required_fields = ['email', 'password', 'name'];
+    $required_fields = ['email', 'password'];
     $errors = [];
 
     foreach ($required_fields as $field) {
@@ -27,43 +28,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (($_POST['email']) && (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL))) {
         $errors['email'] = 'Введите валидный емэйл';
     }
-    if (empty($errors)) {
-        $email = mysqli_real_escape_string($connect, $_POST['email']);
-        $sql = "SELECT id FROM users WHERE email = '$email'";
-        $res = mysqli_query($connect, $sql);
-        if (mysqli_num_rows($res) > 0) {
-            $errors['email'] = 'Пользователь с этим email уже зарегистрирован';
-        }
-    }
 
-    $user_name = $_POST['name'];
     $user_email = $_POST['email'];
     $user_password = $_POST['password'];
-    $fix = 'Пожалуйста, исправьте ошибки в форме';
     $hash_pass = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
     if (count($errors)) {
 
-        $registration = include_template('register.php', [
-            'fix' => $fix,
+        $authorization = include_template('auth.php', [
             'errors' => $errors,
-            'user_name' => $user_name,
             'user_email' => $user_email,
             'user_password' => $user_password
         ]);
 
     } else {
-        $sql_add_user = 'INSERT INTO `doingsdone`.`users` (`email`, `user_name`, `hash_pass`) VALUES (?, ?, ?)';
+        $email = mysqli_real_escape_string($connect, $_POST['email']);
+        $sql = "SELECT * FROM users WHERE email = '$email'";
+        $res = mysqli_query($connect, $sql);
+        $user = $res ? mysqli_fetch_array($res, MYSQLI_ASSOC) : null;
 
-        $stmt = db_get_prepare_stmt($connect, $sql_add_user, [$user_email, $user_name, $hash_pass]);
+        if ($user) {
+            if (password_verify($_POST['password'], $user['hash_pass'])) {
+                $_SESSION['user'] = $user;
 
-        $add_user_res = mysqli_stmt_execute($stmt);
+                if (isset($_SESSION['user'])) {
+                    header("location: index.php");
+                }
 
-        header("location: index.php");
+            }
+            else {
+                $errors['password'] = 'Неверный пароль';
+            }
+        }
+        else {
+            $errors['email'] = 'Такой пользователь не найден';
+        }
+
+        $authorization = include_template('auth.php', [
+            'errors' => $errors,
+            'user_email' => $user_email,
+            'user_password' => $user_password
+        ]);
     }
 }
 
-$content = $registration;
+$content = $authorization;
 $user_content_side = include_template('anonim-content-side.php', [
     'user_content_side' => $user_content_side,
     'tasks' => $tasks,

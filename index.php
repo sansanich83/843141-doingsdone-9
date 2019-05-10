@@ -1,4 +1,6 @@
 <?php
+session_start();
+$user = $_SESSION['user'];
 // показывать или нет выполненные задачи
 $show_complete_tasks = rand(0, 1);
 $page_name = 'Дела в порядке';
@@ -16,58 +18,45 @@ if (!$connect) {
     exit;
 }
 
-$sql_categories = 'SELECT category_name, c.id FROM categories c
-INNER JOIN users u
-ON c.user_id = u.id
-WHERE u.id = 1';
+$categories = getCategories($connect, $user['id']);
+$tasks = getTasks($connect, $user['id']);
 
-$sql_tasks = 'SELECT task_name, deadline, status_complete, category_id, category_name, file_link FROM tasks t
-INNER JOIN categories c
-ON t.category_id = c.id
-WHERE c.user_id = 1
-ORDER BY t.id DESC';
-
-$tasks_res = mysqli_query($connect, $sql_tasks);
-$categories_res = mysqli_query($connect, $sql_categories);
-if ($categories_res) {
-    $categories = mysqli_fetch_all($categories_res, MYSQLI_ASSOC);
-}
-if ($tasks_res) {
-    $tasks = mysqli_fetch_all($tasks_res, MYSQLI_ASSOC);
-    $all_tasks = $tasks;
-}
+$all_tasks = $tasks;
 
 if (isset($_GET['cat_id'])) {
-    $cat_id = $_GET['cat_id'];
-    $sql_tasks = 'SELECT task_name, deadline, status_complete, category_id, category_name FROM tasks t
-    INNER JOIN categories c
-    ON t.category_id = c.id
-    WHERE c.user_id = 1 AND c.id =' . $cat_id;
-
-    $tasks_res = mysqli_query($connect, $sql_tasks);
-    if ($tasks_res) {
-        $tasks = mysqli_fetch_all($tasks_res, MYSQLI_ASSOC);
-    }
+    $cat_id = (int) $_GET['cat_id'];
+    $tasks = getTasks($connect, $user['id'], $cat_id);
 }
 
-$content = include_template('content.php', [
-    'tasks' => $tasks,
-    'show_complete_tasks' => $show_complete_tasks
-]);
+if (!($_SESSION['user'])) {
+    $content = include_template('guest.php', [
+    ]);
+    $main_header_side = include_template('anonim-main-header-side.php', [
+    ]);
+}
+else {
+    $content = include_template('content.php', [
+        'tasks' => $tasks,
+        'show_complete_tasks' => $show_complete_tasks
+    ]);
+    $main_header_side = include_template('user-main-header-side.php', [
+        'user' => $user
+    ]);
+    $user_content_side = include_template('user-content-side.php', [
+        'categories' => $categories,
+        'tasks' => $tasks,
+        'all_tasks' => $all_tasks
+    ]);
+    $sidebar = 1;
+}
 
-$categories = include_template('categories.php', [
-    'categories' => $categories,
-    'tasks' => $tasks,
-    'all_tasks' => $all_tasks
-]);
 $layout_content = include_template('layout.php', [
+    'main_header_side' => $main_header_side,
     'page_name' => $page_name,
-    'categories' => $categories,
-    'content' => $content
+    'user_content_side' => $user_content_side,
+    'content' => $content,
+    'user' => $user,
+    'sidebar' => $sidebar
 ]);
 
-if (count($tasks) === 0) {
-    http_response_code(404);
-} else {
     print($layout_content);
-}
