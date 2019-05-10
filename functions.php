@@ -102,3 +102,31 @@ function db_get_prepare_stmt($link, $sql, $data = []) {
 
     return $stmt;
 }
+
+function getCategories(mysqli $connect, $user_id = 0)
+{
+    $sql = 'SELECT id, category_name FROM categories
+            WHERE user_id = ' . $user_id;
+    $result = mysqli_query($connect, $sql);
+    if ($result) {
+        return mysqli_fetch_all($result, MYSQLI_ASSOC);
+    }
+    return [];
+}
+
+function getTasks(mysqli $connect, $user_id = 0, int $project_id = 0)
+{
+    $sql = 'SELECT task_name, deadline, status_complete, category_id, category_name, file_link FROM tasks t
+            INNER JOIN categories c
+            ON t.category_id = c.id
+            WHERE c.user_id = ' . $user_id;
+    if ($project_id > 0) {
+        $sql .= ' AND c.id = ' . $project_id;
+    }
+    $sql .= ' ORDER BY t.id DESC';
+    $result = mysqli_query($connect, $sql);
+    if ($result) {
+        return mysqli_fetch_all($result, MYSQLI_ASSOC);
+    }
+    return [];
+}
