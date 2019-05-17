@@ -114,19 +114,35 @@ function getCategories(mysqli $connect, $user_id = 0)
     return [];
 }
 
-function getTasks(mysqli $connect, $user_id = 0, int $project_id = 0)
+function getTasks(mysqli $connect, $user_id = 0, int $project_id = 0, $dateSort = 0)
 {
-    $sql = 'SELECT task_name, deadline, status_complete, category_id, category_name, file_link FROM tasks t
+    $sql = 'SELECT t.id, task_name, deadline, status_complete, category_id, category_name, file_link FROM tasks t
             INNER JOIN categories c
             ON t.category_id = c.id
             WHERE c.user_id = ' . $user_id;
     if ($project_id > 0) {
         $sql .= ' AND c.id = ' . $project_id;
     }
+    if ($dateSort == 1) {
+        $sql .= ' AND t.deadline = CURDATE()';
+    }
+    if ($dateSort == 2) {
+        $sql .= ' AND t.deadline = CURDATE() + INTERVAL 1 DAY ';
+    }
+    if ($dateSort == 3) {
+        $sql .= ' AND t.deadline < CURDATE()';
+    }
+
     $sql .= ' ORDER BY t.id DESC';
     $result = mysqli_query($connect, $sql);
     if ($result) {
         return mysqli_fetch_all($result, MYSQLI_ASSOC);
     }
     return [];
+}
+
+function toggleCompleteStatus(mysqli $connect, $t_id) {
+    $sql = 'UPDATE `doingsdone`.`tasks` SET `status_complete`= ABS(`status_complete` - 1) WHERE  `id`=' . $t_id;
+    mysqli_query($connect, $sql);
+    header("location: index.php");
 }

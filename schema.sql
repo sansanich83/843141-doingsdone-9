@@ -33,7 +33,7 @@ CREATE TABLE `tasks` (
 	`task_name` VARCHAR(50) NOT NULL,
 	`category_id` INT(11) NOT NULL,
 	`date_create` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
-	`status_complete` TINYINT(1) NULL DEFAULT NULL,
+	`status_complete` TINYINT(1) NULL DEFAULT '0',
 	`file_link` VARCHAR(50) NULL DEFAULT NULL,
 	`deadline` DATE NULL DEFAULT NULL,
 	PRIMARY KEY (`id`)
@@ -41,4 +41,5 @@ CREATE TABLE `tasks` (
 COLLATE='utf8_general_ci'
 ENGINE=InnoDB
 ;
+
 
