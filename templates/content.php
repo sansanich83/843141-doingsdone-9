@@ -8,15 +8,32 @@
 
 <div class="tasks-controls">
     <nav class="tasks-switch">
-        <a href="/" class="tasks-switch__item tasks-switch__item--active">Все задачи</a>
-        <a href="/" class="tasks-switch__item">Повестка дня</a>
-        <a href="/" class="tasks-switch__item">Завтра</a>
-        <a href="/" class="tasks-switch__item">Просроченные</a>
+        <a href="/?deadline=0" class="tasks-switch__item
+            <?php if (isset($_GET['deadline']) &&  $_GET['deadline'] == 0): ?>
+                tasks-switch__item--active
+            <?php endif; ?>
+        ">Все задачи</a>
+        <a href="/?deadline=1" class="tasks-switch__item
+            <?php if (isset($_GET['deadline']) &&  $_GET['deadline'] == 1): ?>
+                tasks-switch__item--active
+            <?php endif; ?>
+        ">Повестка дня</a>
+        <a href="/?deadline=2" class="tasks-switch__item
+            <?php if (isset($_GET['deadline']) &&  $_GET['deadline'] == 2): ?>
+                tasks-switch__item--active
+            <?php endif; ?>
+        ">Завтра</a>
+        <a href="/?deadline=3" class="tasks-switch__item
+            <?php if (isset($_GET['deadline']) &&  $_GET['deadline'] == 3): ?>
+                tasks-switch__item--active
+            <?php endif; ?>
+        ">Просроченные</a>
     </nav>
     <label class="checkbox">
         <!--добавить сюда аттрибут "checked", если переменная $show_complete_tasks равна единице-->
         <input class="checkbox__input visually-hidden show_completed" type="checkbox"
-            <?php if ($show_complete_tasks === 1): ?> checked <?php endif; ?>>
+            <?php if ($show_complete_tasks === 1): ?> checked <?php endif; ?>
+        >
         <span class="checkbox__text">Показывать выполненные</span>
     </label>
 </div>
@@ -38,7 +55,7 @@
                         <?php if ($val['status_complete'] === '1'): ?>
                             checked
                         <?php endif; ?>
-                    type="checkbox" value="1">
+                    type="checkbox" value="<?=$val['id'];?>">
                 <span class="checkbox__text"><?=esc($val['task_name']); ?></span>
             </label>
         </td>

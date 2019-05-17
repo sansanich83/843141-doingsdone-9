@@ -1,8 +1,16 @@
 <?php
 session_start();
 $user = $_SESSION['user'];
-// показывать или нет выполненные задачи
-$show_complete_tasks = rand(0, 1);
+$show_complete_tasks = $_SESSION['show_completed'];
+if ((isset($_GET['show_completed'])) && ($_GET['show_completed'] === '0')) {
+    $show_complete_tasks = 0;
+    $_SESSION['show_completed'] = 0;
+}
+else if ((isset($_GET['show_completed'])) && ($_GET['show_completed'] === '1')) {
+    $show_complete_tasks = 1;
+    $_SESSION['show_completed'] = 1;
+}
+
 $page_name = 'Дела в порядке';
 $cat_id = '0';
 
@@ -26,6 +34,15 @@ $all_tasks = $tasks;
 if (isset($_GET['cat_id'])) {
     $cat_id = (int) $_GET['cat_id'];
     $tasks = getTasks($connect, $user['id'], $cat_id);
+}
+
+if (isset($_GET['task_id']) && isset(($_GET['check']))) {
+    toggleCompleteStatus($connect, $_GET['task_id']);
+}
+
+if (isset($_GET['deadline'])) {
+    $curDate = $_GET['deadline'];
+    $tasks = getTasks($connect, $user['id'], 0, $curDate);
 }
 
 if (!($_SESSION['user'])) {
