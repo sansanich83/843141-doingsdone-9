@@ -45,6 +45,20 @@ if (isset($_GET['deadline'])) {
     $tasks = getTasks($connect, $user['id'], 0, $curDate);
 }
 
+$search = $_GET['search'] ?? '';
+if ($search) {
+    $sql = 'SELECT task_name, deadline, status_complete, category_id, category_name, file_link FROM tasks t
+    INNER JOIN categories c
+    ON t.category_id = c.id
+    WHERE c.user_id ='. $user['id'] .'
+    AND MATCH(task_name) AGAINST(?)';
+
+    $stmt = db_get_prepare_stmt($connect, $sql, [$search]);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    $tasks = mysqli_fetch_all($result, MYSQLI_ASSOC);
+}
+
 if (!($_SESSION['user'])) {
     $content = include_template('guest.php', [
     ]);

@@ -36,10 +36,12 @@ CREATE TABLE `tasks` (
 	`status_complete` TINYINT(1) NULL DEFAULT '0',
 	`file_link` VARCHAR(50) NULL DEFAULT NULL,
 	`deadline` DATE NULL DEFAULT NULL,
-	PRIMARY KEY (`id`)
+	PRIMARY KEY (`id`),
+	FULLTEXT INDEX `task_name` (`task_name`)
 )
 COLLATE='utf8_general_ci'
 ENGINE=InnoDB
 ;
+
 
 
