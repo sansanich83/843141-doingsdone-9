@@ -114,7 +114,7 @@ function getCategories(mysqli $connect, $user_id = 0)
     return [];
 }
 
-function getTasks(mysqli $connect, $user_id = 0, int $project_id = 0, $dateSort = 0)
+function getTasks(mysqli $connect, $user_id = 0, int $project_id = 0, $dateSort = 0, $status_actual = 0)
 {
     $sql = 'SELECT t.id, task_name, deadline, status_complete, category_id, category_name, file_link FROM tasks t
             INNER JOIN categories c
@@ -131,6 +131,9 @@ function getTasks(mysqli $connect, $user_id = 0, int $project_id = 0, $dateSort 
     }
     if ($dateSort == 3) {
         $sql .= ' AND t.deadline < CURDATE()';
+    }
+    if ($status_actual == 1) {
+        $sql .= 'AND status_complete = 0';
     }
 
     $sql .= ' ORDER BY t.id DESC';

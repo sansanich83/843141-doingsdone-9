@@ -1,0 +1,12 @@
+{
+    "name": "ngtrx/doingsdone",
+    "authors": [
+        {
+            "name": "Aleksandr",
+            "email": "38788523+sansanich83@users.noreply.github.com"
+        }
+    ],
+    "require": {
+        "swiftmailer/swiftmailer": "^6.2"
+    }
+}
