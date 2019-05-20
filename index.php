@@ -1,4 +1,9 @@
 <?php
+
+require_once('vendor/autoload.php');
+require_once('functions.php');
+require_once('config/db.php');
+
 session_start();
 $user = $_SESSION['user'];
 $show_complete_tasks = $_SESSION['show_completed'];
@@ -13,9 +18,6 @@ else if ((isset($_GET['show_completed'])) && ($_GET['show_completed'] === '1')) 
 
 $page_name = 'Дела в порядке';
 $cat_id = '0';
-
-require_once('functions.php');
-require_once('config/db.php');
 
 $connect = mysqli_connect($db['host'], $db['user'], $db['password'], $db['database']);
 mysqli_set_charset($connect, "utf8");
