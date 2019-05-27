@@ -12,7 +12,7 @@
                             " type="text" name="email" id="email" value="<?= $user_email ;?>"
                 placeholder="Введите e-mail">
             <p class="form__message">
-                <?php if ($errors['email']):
+                <?php if (isset($errors['email'])):
                                     print($errors['email']);
                                 ?> <?php endif; ?>
             </p>
@@ -28,7 +28,7 @@
                             " type="password" name="password" id="password" value="<?= $user_password ;?>"
                 placeholder="Введите пароль">
             <p class="form__message">
-                <?php if ($errors['password']):
+                <?php if (isset($errors['password'])):
                                     print($errors['password']);
                                 ?> <?php endif; ?>
             </p>
@@ -44,7 +44,7 @@
                             " type="text" name="name" id="name" value="<?= $user_name ;?>"
                 placeholder="Имя отображается в личном кабинете">
             <p class="form__message">
-                <?php if ($errors['name']):
+                <?php if (isset($errors['name'])):
                                     print($errors['name']);
                                 ?> <?php endif; ?>
             </p>

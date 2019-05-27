@@ -9,9 +9,9 @@
                 <?php if ($errors['name']): ?>
                     form__input--error
                 <?php endif; ?>
-            " type="text" name="name" id="name" value="<?= $task_name ;?>" placeholder="Введите название">
+            " type="text" name="name" id="name" value="<?= esc($task_name) ;?>" placeholder="Введите название">
             <p class="form__message">
-                <?php if ($errors['name']):
+                <?php if (isset($errors['name'])):
                     print($errors['name']);
                 ?> <?php endif; ?>
             </p>
@@ -25,13 +25,14 @@
                     form__input--error
                 <?php endif; ?>
             " name="project" id="project" value="<?= $project_id ;?>">
+            <option value="" disabled selected style='display:none;'>Обязательно выберите из списка</option>
                 <?php foreach ($categories as $key => $category): ?>
                 <option value="<?= $category['id']; ?>" <?php if ($project_id == $category['id']): ?> selected
-                    <?php endif; ?>><?= $category['category_name']; ?></option>
+                    <?php endif; ?>><?= esc($category['category_name']); ?></option>
                 <?php endforeach; ?>
             </select>
             <p class="form__message">
-                <?php if ($errors['project']):
+                <?php if (isset($errors['project'])):
                     print($errors['project']);
                 ?> <?php endif; ?>
             </p>
@@ -47,7 +48,7 @@
             " type="text" name="date" id="date" value="<?= $task_deadline ;?>"
                 placeholder="Введите дату в формате ГГГГ-ММ-ДД">
             <p class="form__message">
-                <?php if ($errors['date']):
+                <?php if (isset($errors['date'])):
                     print($errors['date']);
                 ?> <?php endif; ?>
             </p>

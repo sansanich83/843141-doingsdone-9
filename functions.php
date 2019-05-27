@@ -1,5 +1,8 @@
 <?php
 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 function countByCategory ($list, $category) {
     $count = 0;
     foreach ($list as $key => $val) {

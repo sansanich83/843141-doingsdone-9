@@ -4,9 +4,21 @@ require_once('vendor/autoload.php');
 require_once('functions.php');
 require_once('config/db.php');
 
+$user = '';
+$user_content_side = '';
+$sidebar = '';
+
 session_start();
-$user = $_SESSION['user'];
-$show_complete_tasks = $_SESSION['show_completed'];
+
+if (isset($_SESSION['user'])) {
+    $user = $_SESSION['user'];
+}
+
+$show_complete_tasks = 1;
+if (isset($_SESSION['show_completed'])) {
+    $show_complete_tasks = $_SESSION['show_completed'];
+}
+
 if ((isset($_GET['show_completed'])) && ($_GET['show_completed'] === '0')) {
     $show_complete_tasks = 0;
     $_SESSION['show_completed'] = 0;
@@ -28,10 +40,12 @@ if (!$connect) {
     exit;
 }
 
-$categories = getCategories($connect, $user['id']);
-$tasks = getTasks($connect, $user['id']);
+if (isset($_SESSION['user'])) {
+    $categories = getCategories($connect, $user['id']);
+    $tasks = getTasks($connect, $user['id']);
 
-$all_tasks = $tasks;
+    $all_tasks = $tasks;
+}
 
 if (isset($_GET['cat_id'])) {
     $cat_id = (int) $_GET['cat_id'];
@@ -61,7 +75,7 @@ if ($search) {
     $tasks = mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
 
-if (!($_SESSION['user'])) {
+if (!isset(($_SESSION['user']))) {
     $content = include_template('guest.php', [
     ]);
     $main_header_side = include_template('anonim-main-header-side.php', [

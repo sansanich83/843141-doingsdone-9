@@ -20,10 +20,23 @@ $categories = getCategories($connect, $user['id']);
 $tasks = getTasks($connect, $user['id']);
 
 $all_tasks = $tasks;
+$task_name = '';
+$project_id = '';
+$task_deadline = '';
+$errors = [
+    'name' => '',
+    'project' => '',
+    'date' => ''
+];
 
 $content = include_template('add-task.php', [
-    'categories' => $categories
+    'categories' => $categories,
+    'task_name' => $task_name,
+    'project_id' => $project_id,
+    'task_deadline' => $task_deadline,
+    'errors' => $errors
 ]);
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -42,6 +55,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $task_name = $_POST['name'];
+    if(!isset($_POST['project'])){
+        $_POST['project'] = 0;
+    }
     $project_id = $_POST['project'];
     $task_deadline = $_POST['date'];
 

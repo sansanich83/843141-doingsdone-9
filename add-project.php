@@ -20,8 +20,12 @@ $categories = getCategories($connect, $user['id']);
 $tasks = getTasks($connect, $user['id']);
 
 $all_tasks = $tasks;
+$project_name = '';
+$errors = ['name' => ''];
 
 $content = include_template('project.php', [
+    'project_name' => $project_name,
+    'errors' => $errors
 ]);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

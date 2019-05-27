@@ -12,7 +12,25 @@ if (!$connect) {
     exit;
 }
 
-$registration = include_template('register.php', []);
+$fix = '';
+$user_email = '';
+$user_name = '';
+$user_password = '';
+$page_name = 'Дела в порядке - регистрация';
+
+$errors = [
+    'email' => '',
+    'name' => '',
+    'password' => ''
+];
+
+$registration = include_template('register.php', [
+    'fix' => $fix,
+    'errors' => $errors,
+    'user_email' => $user_email,
+    'user_name' => $user_name,
+    'user_password' => $user_password
+]);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -65,10 +83,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $content = $registration;
 $user_content_side = include_template('anonim-content-side.php', [
-    'user_content_side' => $user_content_side,
-    'tasks' => $tasks,
-    'all_tasks' => $all_tasks
 ]);
+
 $sidebar = 1;
 $main_header_side = include_template('anonim-main-header-side.php', [
 ]);
@@ -78,7 +94,6 @@ $layout_content = include_template('layout.php', [
     'page_name' => $page_name,
     'user_content_side' => $user_content_side,
     'content' => $content,
-    'user' => $user,
     'sidebar' => $sidebar
 ]);
 

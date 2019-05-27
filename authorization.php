@@ -12,8 +12,21 @@ if (!$connect) {
     exit;
 }
 
-$authorization = include_template('auth.php', []);
 session_start();
+
+$page_name = 'Дела в порядке авторизация';
+$user_password = '';
+$user_email = '';
+$errors = [
+    'email' => '',
+    'password' => ''
+];
+
+$authorization = include_template('auth.php', [
+    'user_email' => $user_email,
+    'user_password' => $user_password,
+    'errors' => $errors
+]);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -58,10 +71,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             else {
                 $errors['password'] = 'Неверный пароль';
+                $errors['email'] = '';
             }
         }
         else {
             $errors['email'] = 'Такой пользователь не найден';
+            $errors['password'] = '';
         }
 
         $authorization = include_template('auth.php', [
@@ -74,10 +89,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $content = $authorization;
 $user_content_side = include_template('anonim-content-side.php', [
-    'user_content_side' => $user_content_side,
-    'tasks' => $tasks,
-    'all_tasks' => $all_tasks
 ]);
+
 $sidebar = 1;
 $main_header_side = include_template('anonim-main-header-side.php', [
 ]);
@@ -87,7 +100,6 @@ $layout_content = include_template('layout.php', [
     'page_name' => $page_name,
     'user_content_side' => $user_content_side,
     'content' => $content,
-    'user' => $user,
     'sidebar' => $sidebar
 ]);
 
