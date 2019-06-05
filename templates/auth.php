@@ -8,7 +8,7 @@
             <?php if ($errors['email']): ?>
                 form__input--error
             <?php endif; ?>
-        " type="text" name="email" id="email" value="<?= $user_email ;?>" placeholder="Введите e-mail">
+        " type="text" name="email" id="email" value="<?= esc($user_email) ;?>" placeholder="Введите e-mail">
             <p class="form__message">
                 <?php if (isset($errors['email'])):
                 print($errors['email']);
@@ -22,7 +22,7 @@
             <?php if ($errors['password']): ?>
                 form__input--error
             <?php endif; ?>
-        " type="password" name="password" id="password" value="<?= $user_password ;?>" placeholder="Введите пароль">
+        " type="password" name="password" id="password" value="<?= esc($user_password) ;?>" placeholder="Введите пароль">
             <p class="form__message">
                 <?php if (isset($errors['password'])):
                 print($errors['password']);

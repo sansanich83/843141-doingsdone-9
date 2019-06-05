@@ -67,6 +67,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $file_url = '/uploads/' . $file_name;
         move_uploaded_file($_FILES['file']['tmp_name'], $file_path . $file_name);
     }
+    if ((isset($_POST['name'])) && (strlen($_POST['name']) > 50)) {
+        $errors['name'] = 'Слишком длинное название';
+    }
 
     if (count($errors)) {
         $content = include_template('add-task.php', [

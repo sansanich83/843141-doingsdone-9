@@ -39,6 +39,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
+    if ((isset($_POST['name'])) && (strlen($_POST['name']) > 50)) {
+        $errors['name'] = 'Слишком длинное название';
+    }
+
     $project_name = $_POST['name'];
 
     if (count($errors)) {

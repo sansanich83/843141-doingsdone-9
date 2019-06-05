@@ -6,13 +6,13 @@
             <label class="form__label" for="project_name">Название <sup>*</sup></label>
 
             <input class="form__input
-                <?php if ($errors['name']): ?>
+                <?php if (!empty($errors['name'])): ?>
                     form__input--error
                 <?php endif; ?>
             " type="text" name="name" id="project_name" value="<?= esc($project_name) ;?>"
                 placeholder="Введите название проекта">
             <p class="form__message">
-                <?php if ($errors['name']):
+                <?php if (!empty($errors['name'])):
                     print($errors['name']);
                 ?> <?php endif; ?>
             </p>

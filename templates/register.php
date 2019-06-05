@@ -6,15 +6,15 @@
             <label class="form__label" for="email">E-mail <sup>*</sup></label>
 
             <input class="form__input
-                                <?php if ($errors['email']): ?>
-                                    form__input--error
-                                <?php endif; ?>
-                            " type="text" name="email" id="email" value="<?= $user_email ;?>"
+                    <?php if ($errors['email']): ?>
+                        form__input--error
+                    <?php endif; ?>
+                " type="text" name="email" id="email" value="<?= esc($user_email) ;?>"
                 placeholder="Введите e-mail">
             <p class="form__message">
                 <?php if (isset($errors['email'])):
-                                    print($errors['email']);
-                                ?> <?php endif; ?>
+                    print($errors['email']);
+                ?> <?php endif; ?>
             </p>
         </div>
 
@@ -22,15 +22,15 @@
             <label class="form__label" for="password">Пароль <sup>*</sup></label>
 
             <input class="form__input
-                                <?php if ($errors['password']): ?>
-                                    form__input--error
-                                <?php endif; ?>
-                            " type="password" name="password" id="password" value="<?= $user_password ;?>"
+                    <?php if ($errors['password']): ?>
+                        form__input--error
+                    <?php endif; ?>
+                " type="password" name="password" id="password" value="<?= esc($user_password) ;?>"
                 placeholder="Введите пароль">
             <p class="form__message">
                 <?php if (isset($errors['password'])):
-                                    print($errors['password']);
-                                ?> <?php endif; ?>
+                    print($errors['password']);
+                ?> <?php endif; ?>
             </p>
         </div>
 
@@ -38,15 +38,15 @@
             <label class="form__label" for="name">Имя <sup>*</sup></label>
 
             <input class="form__input
-                                <?php if ($errors['name']): ?>
-                                    form__input--error
-                                <?php endif; ?>
-                            " type="text" name="name" id="name" value="<?= $user_name ;?>"
+                    <?php if ($errors['name']): ?>
+                        form__input--error
+                    <?php endif; ?>
+                " type="text" name="name" id="name" value="<?= esc($user_name) ;?>"
                 placeholder="Имя отображается в личном кабинете">
             <p class="form__message">
                 <?php if (isset($errors['name'])):
-                                    print($errors['name']);
-                                ?> <?php endif; ?>
+                    print($errors['name']);
+                ?> <?php endif; ?>
             </p>
         </div>
 

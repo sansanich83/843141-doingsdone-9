@@ -4,9 +4,11 @@ require_once('vendor/autoload.php');
 require_once('functions.php');
 require_once('config/db.php');
 
-$user = '';
 $user_content_side = '';
 $sidebar = '';
+$user = [
+    'user_name' => ''
+];
 
 session_start();
 
@@ -63,10 +65,11 @@ if (isset($_GET['deadline'])) {
 
 $search = $_GET['search'] ?? '';
 if ($search) {
+    $safe_user_id = mysqli_real_escape_string($connect, $user['id']);
     $sql = 'SELECT task_name, deadline, status_complete, category_id, category_name, file_link FROM tasks t
     INNER JOIN categories c
     ON t.category_id = c.id
-    WHERE c.user_id ='. $user['id'] .'
+    WHERE c.user_id ='. $safe_user_id .'
     AND MATCH(task_name) AGAINST(?)';
 
     $stmt = db_get_prepare_stmt($connect, $sql, [$search]);

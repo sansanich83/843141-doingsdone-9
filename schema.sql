@@ -34,7 +34,7 @@ CREATE TABLE `tasks` (
 	`category_id` INT(11) NOT NULL,
 	`date_create` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
 	`status_complete` TINYINT(1) NULL DEFAULT '0',
-	`file_link` VARCHAR(50) NULL DEFAULT NULL,
+	`file_link` TEXT NULL DEFAULT NULL,
 	`deadline` DATE NULL DEFAULT NULL,
 	PRIMARY KEY (`id`),
 	FULLTEXT INDEX `task_name` (`task_name`)

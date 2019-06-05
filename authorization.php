@@ -14,6 +14,10 @@ if (!$connect) {
 
 session_start();
 
+if (isset($_SESSION['user'])) {
+    header("location: index.php");
+}
+
 $page_name = 'Дела в порядке авторизация';
 $user_password = '';
 $user_email = '';

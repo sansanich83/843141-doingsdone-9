@@ -12,6 +12,13 @@ if (!$connect) {
     exit;
 }
 
+session_start();
+
+if (isset($_SESSION['user'])) {
+    header("location: index.php");
+}
+
+
 $fix = '';
 $user_email = '';
 $user_name = '';
@@ -52,6 +59,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (mysqli_num_rows($res) > 0) {
             $errors['email'] = 'Пользователь с этим email уже зарегистрирован';
         }
+    }
+    if ((isset($_POST['name'])) && (strlen($_POST['name']) > 50)) {
+        $errors['name'] = 'Слишком длинное имя пользователя';
+    }
+    if ((isset($_POST['email'])) && (strlen($_POST['email']) > 50)) {
+        $errors['email'] = 'Слишком длиный адрес почты';
     }
 
     $user_name = $_POST['name'];

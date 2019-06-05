@@ -6,7 +6,7 @@
             <label class="form__label" for="name">Название <sup>*</sup></label>
 
             <input class="form__input
-                <?php if ($errors['name']): ?>
+                <?php if (!empty($errors['name'])): ?>
                     form__input--error
                 <?php endif; ?>
             " type="text" name="name" id="name" value="<?= esc($task_name) ;?>" placeholder="Введите название">
@@ -21,7 +21,7 @@
             <label class="form__label" for="project">Проект <sup>*</sup></label>
 
             <select class="form__input form__input--select
-                <?php if ($errors['project']): ?>
+                <?php if (!empty($errors['project'])): ?>
                     form__input--error
                 <?php endif; ?>
             " name="project" id="project" value="<?= $project_id ;?>">
@@ -42,10 +42,10 @@
             <label class="form__label" for="date">Дата выполнения</label>
 
             <input class="form__input form__input--date
-                <?php if ($errors['date']): ?>
+                <?php if (!empty($errors['date'])): ?>
                     form__input--error
                 <?php endif; ?>
-            " type="text" name="date" id="date" value="<?= $task_deadline ;?>"
+            " type="text" name="date" id="date" value="<?= esc($task_deadline) ;?>"
                 placeholder="Введите дату в формате ГГГГ-ММ-ДД">
             <p class="form__message">
                 <?php if (isset($errors['date'])):
