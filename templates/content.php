@@ -42,28 +42,31 @@
     <?php foreach ($tasks as $key => $val): ?>
     <tr class="tasks__item task
             <?php
-            if ($val['status_complete'] === '1'): echo "task--completed";
+            if ((isset($val['status_complete'])) && ($val['status_complete'] === '1')): echo "task--completed";
             else: isHotTask($val['deadline']);
             endif;
             ?>
-        <?php if (($val['status_complete'] === '1') && ($show_complete_tasks === 0)): ?>
+        <?php if ((isset($val['status_complete'])) && ($val['status_complete'] === '1') && ($show_complete_tasks === 0)): ?>
             visually-hidden
         <?php endif; ?>">
         <td class="task__select">
             <label class="checkbox task__checkbox">
                 <input class="checkbox__input visually-hidden task__checkbox"
-                        <?php if ($val['status_complete'] === '1'): ?>
+                        <?php if ((isset($val['status_complete'])) && ($val['status_complete'] === '1')): ?>
                             checked
                         <?php endif; ?>
-                    type="checkbox" value="<?=$val['id'];?>">
-                <span class="checkbox__text"><?=esc($val['task_name']); ?></span>
+                        type="checkbox" value="
+                        <?php if (isset($val['id'])):
+                            echo $val['id'];
+                        endif; ?>">
+                <span class="checkbox__text"><?php if (isset($val['task_name'])): echo esc($val['task_name']); endif; ?></span>
             </label>
         </td>
         <td class="task__file">
-            <a class="download-link <?php if ($val['file_link'] === NULL):?>visually-hidden<?php endif;?>
-            "href="<?= $val['file_link'] ;?>"><?= basename($val['file_link']) ;?></a>
+            <a class="download-link <?php if (empty($val['file_link'])):?>visually-hidden<?php endif;?>
+            "href="<?php if (isset($val['file_link'])): echo $val['file_link']; endif; ?>"><?php if (isset($val['file_link'])): echo basename($val['file_link']); endif; ?></a>
         </td>
-        <td class="task__date"><?= $val['deadline'] ;?></td>
+        <td class="task__date"><?php if (isset($val['deadline'])): echo $val['deadline']; endif;?></td>
     </tr>
     <?php endforeach; ?>
     <p>

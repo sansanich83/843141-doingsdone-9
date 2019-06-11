@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $errors[$field] = 'Поле обязательно для заполнения';
         }
     }
-    if (($_POST['email']) && (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL))) {
+    if (isset(($_POST['email'])) && (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL))) {
         $errors['email'] = 'Введите валидный емэйл';
     }
     if (empty($errors)) {
@@ -67,11 +67,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors['email'] = 'Слишком длиный адрес почты';
     }
 
-    $user_name = $_POST['name'];
-    $user_email = $_POST['email'];
-    $user_password = $_POST['password'];
+    if (isset($_POST['name'])) {
+        $user_name = $_POST['name'];
+    }
+    if (isset($_POST['email'])) {
+        $user_email = $_POST['email'];
+    }
+    if (isset($_POST['password'])) {
+        $user_password = $_POST['password'];
+    }
     $fix = 'Пожалуйста, исправьте ошибки в форме';
-    $hash_pass = password_hash($_POST['password'], PASSWORD_DEFAULT);
+
+    if (isset($_POST['password'])) {
+        $hash_pass = password_hash($_POST['password'], PASSWORD_DEFAULT);
+    }
 
     if (count($errors)) {
 

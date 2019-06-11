@@ -6,6 +6,7 @@ require_once('config/db.php');
 
 $user_content_side = '';
 $sidebar = '';
+$search = '';
 $user = [
     'user_name' => ''
 ];
@@ -63,7 +64,10 @@ if (isset($_GET['deadline'])) {
     $tasks = getTasks($connect, $user['id'], 0, $curDate);
 }
 
-$search = $_GET['search'] ?? '';
+if (isset($_GET['search'])) {
+    $search = $_GET['search'] ?? '';
+}
+
 if ($search) {
     $safe_user_id = mysqli_real_escape_string($connect, $user['id']);
     $sql = 'SELECT task_name, deadline, status_complete, category_id, category_name, file_link FROM tasks t

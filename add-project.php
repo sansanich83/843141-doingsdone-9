@@ -2,7 +2,10 @@
 $page_name = 'Дела в порядке';
 $cat_id = '0';
 session_start();
-$user = $_SESSION['user'];
+
+if (isset($_SESSION['user'])) {
+    $user = $_SESSION['user'];
+}
 
 require_once('functions.php');
 require_once('config/db.php');
@@ -16,8 +19,11 @@ if (!$connect) {
     exit;
 }
 
-$categories = getCategories($connect, $user['id']);
-$tasks = getTasks($connect, $user['id']);
+if (isset($_SESSION['user'])) {
+    $categories = getCategories($connect, $user['id']);
+    $tasks = getTasks($connect, $user['id']);
+}
+
 
 $all_tasks = $tasks;
 $project_name = '';
@@ -43,7 +49,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors['name'] = 'Слишком длинное название';
     }
 
-    $project_name = $_POST['name'];
+    if (isset($_POST['name'])) {
+       $project_name = $_POST['name'];
+    }
 
     if (count($errors)) {
         $content = include_template('project.php', [

@@ -1,8 +1,11 @@
 <?php
-$page_name = 'Дела в порядке';
+$page_name = 'Дела в порядке добавление задачи';
 $cat_id = '0';
 session_start();
-$user = $_SESSION['user'];
+
+if (isset($_SESSION['user'])) {
+    $user = $_SESSION['user'];
+}
 
 require_once('functions.php');
 require_once('config/db.php');
@@ -16,8 +19,11 @@ if (!$connect) {
     exit;
 }
 
-$categories = getCategories($connect, $user['id']);
-$tasks = getTasks($connect, $user['id']);
+if (isset($_SESSION['user'])) {
+    $categories = getCategories($connect, $user['id']);
+    $tasks = getTasks($connect, $user['id']);
+}
+
 
 $all_tasks = $tasks;
 $task_name = '';
@@ -48,18 +54,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $errors[$field] = 'Поле обязательно для заполнения';
         }
     }
-    if (($_POST['date']) && (!is_date_valid($_POST['date']))) {
+    if ((!empty($_POST['date'])) && (!is_date_valid($_POST['date']))) {
         $errors['date'] = 'Нужно ввести дату в формате ГГГГ-ММ-ДД';
-    } else if (($_POST['date']) && (is_old_task_date($_POST['date']))) {
+    } else if (!empty(($_POST['date'])) && (is_old_task_date($_POST['date']))) {
         $errors['date'] = 'Дата должна быть больше или равна текущей';
     }
 
-    $task_name = $_POST['name'];
+    if (isset($_POST['name'])) {
+        $task_name = $_POST['name'];
+    }
+
     if(!isset($_POST['project'])){
         $_POST['project'] = 0;
     }
-    $project_id = $_POST['project'];
-    $task_deadline = $_POST['date'];
+
+    if (isset($_POST['project'])){
+        $project_id = $_POST['project'];
+    }
+
+    if (isset($_POST['date'])){
+        $task_deadline = $_POST['date'];
+    }
 
     if (isset($_FILES['file'])) {
         $file_name = $_FILES['file']['name'];

@@ -6,7 +6,7 @@
             <label class="form__label" for="email">E-mail <sup>*</sup></label>
 
             <input class="form__input
-                    <?php if ($errors['email']): ?>
+                    <?php if (!empty($errors['email'])): ?>
                         form__input--error
                     <?php endif; ?>
                 " type="text" name="email" id="email" value="<?= esc($user_email) ;?>"
@@ -22,7 +22,7 @@
             <label class="form__label" for="password">Пароль <sup>*</sup></label>
 
             <input class="form__input
-                    <?php if ($errors['password']): ?>
+                    <?php if (!empty($errors['password'])): ?>
                         form__input--error
                     <?php endif; ?>
                 " type="password" name="password" id="password" value="<?= esc($user_password) ;?>"
@@ -38,7 +38,7 @@
             <label class="form__label" for="name">Имя <sup>*</sup></label>
 
             <input class="form__input
-                    <?php if ($errors['name']): ?>
+                    <?php if (!empty($errors['name'])): ?>
                         form__input--error
                     <?php endif; ?>
                 " type="text" name="name" id="name" value="<?= esc($user_name) ;?>"

@@ -27,8 +27,8 @@
             " name="project" id="project" value="<?= $project_id ;?>">
             <option value="" disabled selected style='display:none;'>Обязательно выберите из списка</option>
                 <?php foreach ($categories as $key => $category): ?>
-                <option value="<?= $category['id']; ?>" <?php if ($project_id == $category['id']): ?> selected
-                    <?php endif; ?>><?= esc($category['category_name']); ?></option>
+                <option value="<?php if (isset($category['id'])): echo $category['id']; endif; ?>" <?php if ((isset($category['id'])) && ($project_id == $category['id'])): ?> selected
+                    <?php endif; ?>><?php if (isset($category['category_name'])): echo esc($category['category_name']); endif; ?></option>
                 <?php endforeach; ?>
             </select>
             <p class="form__message">

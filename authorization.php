@@ -42,13 +42,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $errors[$field] = 'Поле обязательно для заполнения';
         }
     }
-    if (($_POST['email']) && (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL))) {
+    if ((!empty($_POST['email'])) && (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL))) {
         $errors['email'] = 'Введите валидный емэйл';
     }
 
-    $user_email = $_POST['email'];
-    $user_password = $_POST['password'];
-    $hash_pass = password_hash($_POST['password'], PASSWORD_DEFAULT);
+    if (isset($_POST['email'])) {
+        $user_email = $_POST['email'];
+    }
+
+    if (isset($_POST['password'])) {
+        $user_password = $_POST['password'];
+    }
+
+    if (isset($_POST['password'])) {
+        $hash_pass = password_hash($_POST['password'], PASSWORD_DEFAULT);
+    }
 
     if (count($errors)) {
 

@@ -5,7 +5,7 @@
             <label class="form__label" for="email">E-mail <sup>*</sup></label>
 
             <input class="form__input
-            <?php if ($errors['email']): ?>
+            <?php if (!empty($errors['email'])): ?>
                 form__input--error
             <?php endif; ?>
         " type="text" name="email" id="email" value="<?= esc($user_email) ;?>" placeholder="Введите e-mail">
@@ -19,7 +19,7 @@
         <div class="form__row">
             <label class="form__label" for="password">Пароль <sup>*</sup></label>
             <input class="form__input
-            <?php if ($errors['password']): ?>
+            <?php if (!empty($errors['password'])): ?>
                 form__input--error
             <?php endif; ?>
         " type="password" name="password" id="password" value="<?= esc($user_password) ;?>" placeholder="Введите пароль">

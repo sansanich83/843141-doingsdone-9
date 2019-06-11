@@ -16,11 +16,23 @@ if (!$connect) {
 $sql = 'SELECT `email`, `id`, `user_name` FROM users';
 $res = mysqli_query($connect, $sql);
 $users_email = mysqli_fetch_all($res, MYSQLI_ASSOC);
+$msg_content = '';
+$user_email = '';
+$user_name = '';
+$tasks = '';
 
 foreach($users_email as $val) {
-    $user_email = $val['email'];
-    $user_name = $val['user_name'];
-    $tasks = getTasks($connect, $val['id'], 0, 1, 1);
+    if (isset($val['email'])) {
+        $user_email = $val['email'];
+    }
+
+    if (isset($val['user_name'])) {
+        $user_name = $val['user_name'];
+    }
+
+    if (isset($val['id'])) {
+        $tasks = getTasks($connect, $val['id'], 0, 1, 1);
+    }
 
     if (count($tasks)) {
         $msg_content = include_template('mail-notify.php', [
