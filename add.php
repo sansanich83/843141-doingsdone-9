@@ -19,7 +19,7 @@ if (!$connect) {
     exit;
 }
 
-if (isset($_SESSION['user'])) {
+if (isset($user['id'])) {
     $categories = getCategories($connect, $user['id']);
     $tasks = getTasks($connect, $user['id']);
 }
